@@ -1,17 +1,22 @@
 {% extends 'hotel/header.html' %}
 
 {% block content %}
-
+{% if user.is_authenticated %}
+  <center><a href="/hotel/nutrient/create">Create Nutrient</a></center>
+  <br><br>
+{%endif%}
   <div class="container">
     <table class="table table-striped table-bordered table-sm">
     <thead class="thead-dark">
     <tr>
-        <th>Nutrient Name</th>
-        <th>Nutrient Unit</th>
-        <th>Nutrient created_at</th>
-        <th>Nutrient updated_at</th>
-        <th>Nutrient updated_by</th>
+      <th>Nutrient Name</th>
+      <th>Nutrient Unit</th>
+      <th>Nutrient created_at</th>
+      <th>Nutrient updated_at</th>
+      <th>Nutrient updated_by</th>
+      {% if user.is_authenticated %}
         <th>Actions</th>
+      {%endif%}
     </tr>
     </thead>
     <tbody>
@@ -22,16 +27,17 @@
         <td>{{ nutrie.created_at }}</td>
         <td>{{ nutrie.updated_at }}</td>
         <td>{{ nutrie.updated_by }}</td>
+        {% if user.is_authenticated %}
           <td>
               <a href="{% url 'hotel:nutrient_edit' nutrie.id %}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
               <a href="/hotel/nutrient/delete/{{ nutrie.id }}">Delete</a>
           </td>
+        {%endif%}
       </tr>
     {% endfor %}
     </tbody>
 </table>
 <br>
 <br>
-<center><a href="/hotel/nutrient/create">Create Nutrient</a></center>
   </div>
 {% endblock %}

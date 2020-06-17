@@ -23,8 +23,8 @@ class NutrientForm(forms.ModelForm):
 
 
 class ProductForm(forms.Form):
-  CHOICES = [('Active', 'Active'),
-             ('Inactive', 'Inactive')]
+  CHOICES = [(True, 'Active'),
+             (False, 'Inactive')]
 
   name = forms.CharField(max_length=50)
   description = forms.CharField()
@@ -39,7 +39,8 @@ class ProductForm(forms.Form):
       raise forms.ValidationError('You have to write something!')
 
 class ProductNutrientsForm(forms.Form):
-  nutrient = forms.ModelChoiceField(queryset=Nutrient.objects.all(), label='Nutrient', widget=forms.Select(attrs={'display': 'block'}))
+  nutrient = forms.ModelChoiceField(queryset=Nutrient.objects.all(), label='Nutrient',
+                                    widget=forms.Select(attrs={'class': 'select_nutrient', 'name': 'nutrientc[0]', 'id': 'nutrient_0'}))
   nutrient_value = forms. DecimalField()
 
   def clean(self):

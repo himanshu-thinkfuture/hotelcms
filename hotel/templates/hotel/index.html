@@ -5,6 +5,7 @@
       <ul>
         {% if user.is_authenticated %}
           <li><a href="{% url 'hotel:nutrients_list' %}">All Nutrients</a></li>
+          <li><a href="{% url 'hotel:products_list' %}">All Products</a></li>
         {% endif %}
       </ul>
     </div>

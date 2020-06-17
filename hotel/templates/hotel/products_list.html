@@ -1,43 +1,67 @@
+
 {% extends 'hotel/header.html' %}
-
+{% load helper %}
 {% block content %}
+{% if user.is_authenticated %}
+  <center><a href="/hotel/product/new">Create Product</a></center>
+  <br><br>
+{%endif%}
 
-  <div class="container">
-    <table class="table table-striped table-bordered table-sm">
+
+<div class="container">
+  <table class="table table-striped table-bordered table-sm" id="product_table">
     <thead class="thead-dark">
     <tr>
       <th>Product Name</th>
       <th>Product Description</th>
       <th>Product Nutrients</th>
+      <th>Product Status</th>
       <th>Product created_at</th>
       <th>Product updated_at</th>
       <th>Product updated_by</th>
-      <th>Actions</th>
+      {% if user.is_authenticated %}
+        <th>Actions</th>
+      {%endif%}
     </tr>
     </thead>
     <tbody>
     {% for product in products %}
-      <tr>
-        <td>{{ product.name }}</td>
-        <td>{{ product.description }}</td>
+    <tr>
+      <td>{{ product.name }}{{ product.id }}</td>
+      <td>{{ product.description }}</td>
+      <td>
+        {% for   pnutrient in nutrients|get_item:product.id %}
+        {{pnutrient.nutrient.nutrient_name}}: {{pnutrient.nutrient_value|floatformat:3}} {{pnutrient.nutrient.nutrient_unit}}
+        <br>
+        {%endfor%}
+      </td>
+      <td>
+        {%if product.status%}
+        Active
+        {%else%}
+        Inactive
+        {%endif%}
+      </td>
+      <td>{{ product.created_at }}</td>
+      <td>{{ product.updated_at }}</td>
+      <td>{{ product.updated_by }}</td>
+      {% if user.is_authenticated %}
         <td>
-          {% for pnutrients in nutrients[product.id] %}
-            {{ pnutrients.nutrient.nutrient_name}}: {{pnutrients.nutrient_value}}
-          {% endfor %}
+          <a href="{% url 'hotel:product_edit' product.id  %}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+          <a href="/hotel/product/delete/{{ product.id }}">Delete</a>
         </td>
-        <td>{{ product.created_at }}</td>
-        <td>{{ product.updated_at }}</td>
-        <td>{{ product.updated_by }}</td>
-          <td>
-              <a href="/hotel/product/edit/{{ product.id }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
-              <a href="/hotel/product/delete/{{ product.id }}">Delete</a>
-          </td>
-      </tr>
+      {%endif%}
+    </tr>
     {% endfor %}
     </tbody>
-</table>
-<br>
-<br>
-<center><a href="/hotel/product/create">Create Product</a></center>
-  </div>
+  </table>
+  <br>
+  <br>
+</div>
+<script>
+  $(document).ready( function () {
+    $('#product_table').DataTable({});
+  } );
+</script>
+
 {% endblock %}

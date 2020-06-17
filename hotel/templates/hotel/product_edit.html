@@ -1,0 +1,85 @@
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="form-group row">
+    <h5>Update Product</h5>
+  </div>
+  <form method="POST" action= "{% url 'hotel:product_edit' product.id  %}">
+    {% csrf_token %}
+    <p><label for="id_name">Name:</label>
+      <input type="text" name="name" maxlength="50" required="" id="id_name" value="{{product.name}}">
+    </p>
+    <p><label for="id_description">Description:</label>
+      <input type="text" name="description" required="" id="id_description" value="{{product.description}}">
+    </p>
+    <p>
+      <label for="id_status_0">Status:</label>
+    </p>
+    <ul id="id_status" class="radio_button">
+      {%if product.status == True%}
+        <li>
+          <label for="id_status_0"><input type="radio" name="status" value="True" class="radio_button" required="" id="id_status_0" checked>
+          Active</label>
+        </li>
+        <li>
+          <label for="id_status_1"><input type="radio" name="status" value="False" class="radio_button" required="" id="id_status_1">
+          Inactive</label>
+        </li>
+      {%else%}
+        <li>
+          <label for="id_status_0"><input type="radio" name="status" value="True" class="radio_button" required="" id="id_status_0">
+          Active</label>
+        </li>
+        <li>
+          <label for="id_status_1"><input type="radio" name="status" value="False" class="radio_button" required="" id="id_status_1" checked>
+          Inactive</label>
+        </li>
+      {%endif%}
+
+  </ul><p></p>
+
+    <h6>Update Nutrients</h6>
+    <div id="container">
+      {% for pnutrient in product_nutrients%}
+        <div class="nested-form">
+          <p>
+            <label for={{"basic_attributes_replace_select"|get_string:forloop.counter0}}><i class="fa fa-asterisk"></i> Nutrient</label>
+            <select class="form-control select_nutrient" name={{"basic_attributes[replace][select]"|get_string:forloop.counter0}} id={{"basic_attributes_replace_select"|get_string:forloop.counter0}} required>
+              {% for nutrient in nutrients %}
+                {%if pnutrient.nutrient == nutrient%}
+                  <option value="{{ nutrient.id }}" selected>{{ nutrient.nutrient_name }}</option>
+                {%else%}
+                  <option value="{{ nutrient.id }}" >{{ nutrient.nutrient_name }}</option>
+                {%endif%}
+              {% endfor %}
+            </select>
+          </p>
+          <p>
+            <label for={{"basic_attributes_replace_number"|get_string:forloop.counter0}}>Nutrient value:</label>
+            <input type="number" value="{{pnutrient.nutrient_value|floatformat:3}}" name={{"basic_attributes[replace][number]"|get_string:forloop.counter0}} step="any" required="" id={{"basic_attributes_replace_number"|get_string:forloop.counter0}}, class="form-control">
+          </p>
+        </div>
+        <p>
+          <input type="hidden" value="{{pnutrient.pk}}" name={{"nutrient[replace][id]"|get_string:forloop.counter0}} id={{"nutrient_replace_id"|get_string:forloop.counter0}}>
+        </p>
+      {%endfor%}
+
+    </div>
+    <input type="button" value="Add More Nutrient" id="add" class="btn btn-danger" >
+    <br><br>
+
+    <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Update Product</button>
+
+  </form>
+  <script >
+      $(document).ready( function () {
+        $('#container').nestedForm({
+          forms: '.nested-form',
+          adder: '#add'
+        });
+      });
+    </script>
+</div>
+{% endblock %}

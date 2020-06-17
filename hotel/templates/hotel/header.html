@@ -4,36 +4,21 @@
   <title>Hotel</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>-->
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+  <script type = "text/javascript" src = "https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
   <script>
-  <!--    $(document).ready(function() {-->
-  <!--      $('select').material_select();-->
-  <!--    });-->
-  <!--  $('#container').nestedForm({-->
-  <!--  forms: '.nested-form',-->
-  <!--  adder: '#add'-->
-  <!--  });-->
-
-  <!--  $('#removable_container').nestedForm({-->
-  <!--  forms: '.nested-form',-->
-  <!--  adder: '#removable_add',-->
-  <!--  remover: '.removable-remove'-->
-  <!--  });-->
-
+<!--      $(document).ready(function() {-->
+<!--        $('select').material_select();-->
+<!--      });-->
   </script>
 
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'hotel/style.css' %}">
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>-->
-<!--  <script  src="{% static 'hotel/src/consts.js' %}"></script>-->
-<!--  <script  src="{% static 'hotel/src/nested-form.js' %}"></script>-->
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
   <script  src="{% static 'hotel/dist/jquery-nested-form.js' %}"></script>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -47,7 +32,8 @@
           <li><a href=#>{{user.username|title}}</a></li>
         {% endif %}
         <li><a href="/">Home</a></li>
-        <li><a href="/">Products</a></li>
+        <li><a href="{% url 'hotel:products_list' %}">Products</a></li>
+        <li><a href="{% url 'hotel:nutrients_list' %}">Nutrients</a></li>
         {% if user.is_authenticated %}
           <li><a href="/hotel/logout">Logout</a></li>
         {% else %}

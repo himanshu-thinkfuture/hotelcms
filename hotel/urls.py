@@ -15,5 +15,6 @@ urlpatterns = [
   path('nutrient/delete/<int:id>', views.nutrient_destroy, name="nutrient_destroy"),
   path('product/new', views.product_create, name='product_create'),
   path('products_list',views.products_list, name= "products_list"),
-  # path('nutrient/<int:pk>/', views.show_nutrient.as_view(), name='show_nutrient'),
+  path('product/edit/<int:id>', views.product_edit, name="product_edit"),
+  path('product/delete/<int:id>', views.product_destroy, name="product_destroy"),
 ]

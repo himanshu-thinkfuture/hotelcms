@@ -3,28 +3,40 @@
 {% block content %}
 
     <p class="container">
-        <form method="POST" action= "{% url 'hotel:product_create' %}">
+      <form method="POST" action= "{% url 'hotel:product_create' %}">
         {% csrf_token %}
-       {{product_form.as_p}}
-          <script >
-          $('#removable_container').nestedForm({
-            forms: '.nested-form',
-            adder: '#removable_add',
-            remover: '.removable-remove'
-          });
-        </script>
-        <div id="removable_container">
-          {% for field in product_nutrients.visible_fields%}
-            <div class="nested-form">
-              {{ field.label_tag }}
-              {{ field }}
-            </div>
-          {% endfor %}
-        </div>
-        <input type="button" value="Add" id="removable_add" class="btn btn-danger">
+        {{product_form.as_p}}
+        <h6>Add Nutrients</h6>
+        <div id="container">
+          <div class="nested-form">
+            <p>
+              <label for="basic_attributes_0_select"><i class="fa fa-asterisk"></i> Nutrient</label>
+              <select class="form-control select_nutrient" name="basic_attributes[0][select]" id="basic_attributes_0_select" required>
+                {% for nutrient in nutrients %}
+                <option value="{{ nutrient.id }}">{{ nutrient.nutrient_name }}</option>
+                {% endfor %}
+              </select>
+            </p>
+            <p>
+              <label for="basic_attributes_0_number">Nutrient value:</label>
+              <input type="number" name="basic_attributes[0][number]" step="any" required="" id="basic_attributes_0_number", class="form-control">
+            </p>
+          </div>
 
-          <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Create</button>
+        </div>
+        <input type="button" value="Add More Nutrient" id="add" class="btn btn-danger" >
+        <br><br>
+
+          <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Add Product</button>
         </form>
     </div>
+    <script >
+      $(document).ready( function () {
+        $('#container').nestedForm({
+          forms: '.nested-form',
+          adder: '#add'
+        });
+      });
+    </script>
 {% endblock %}
 

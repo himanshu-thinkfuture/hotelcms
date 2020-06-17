@@ -96,11 +96,13 @@ def nutrients_list(request):
 
 
 def nutrient_edit(request, id):
+  if not request.user.is_authenticated:
+    messages.info(request, "Please Login to continue.")
+    return redirect('/')
   nutrient = Nutrient.objects.get(pk=id)
   if request.method == "GET":
     return render(request, "hotel/nutrient_edit.html", {'nutrient': nutrient})
   else:
-    # import pdb; pdb.set_trace()
     form = NutrientForm(request.POST or None, instance=nutrient)
     if form.is_valid():
       fs = form.save(commit=False)
@@ -112,68 +114,111 @@ def nutrient_edit(request, id):
 
 
 def nutrient_destroy(request, id):
+  if not request.user.is_authenticated:
+    messages.info(request, "Please Login to continue.")
+    return redirect('/')
   nutrient = Nutrient.objects.get(id=id)
   nutrient.delete()
   messages.info(request, f"Nutrient {nutrient.nutrient_name} is deleted.")
   return redirect('hotel:nutrients_list')
 
 def product_create(request):
+  if not request.user.is_authenticated:
+    messages.info(request, "Please Login to continue.")
+    return redirect('/')
   if request.method == 'POST':
     # context = {}
     # # create object of form
     form = ProductForm(request.POST or None)
-    # # check if form data is valid
-    # if form.is_valid():
-    #   # save the form data to model
-    #   fs = form.save(commit=False)
-    #   fs.updated_by = request.user
-    #   fs.save()
-    #   messages.info(request, f"Nutrient {form.cleaned_data['nutrient_name']} is created.")
-    #   return redirect('/')
-    # else:
-    #   messages.error(request, "Invalid details")
+    product = Product(name= form.data['name'], description= form.data['description'])
+    if form.data['status'] == 'True':
+      product.status = True
+    else:
+      product.status = False
+    try:
+      product.save()
+      i = 0
+      value = True
+      while value:
+        pn= ProductNutrients(product=product,nutrient=Nutrient(pk=request.POST[f"basic_attributes[{i}][select]"]),nutrient_value=request.POST[f"basic_attributes[{i}][number]"],updated_by=request.user)
+        pn.save()
+        i += 1
+        try:
+          value = request.POST[f"basic_attributes[{i}][select]"]
+        except :
+          value = False
+      messages.info(request, f"Product {form.data['name']} is created.")
+      return redirect('/')
+    except:
+      messages.error(request, "Invalid details")
+      return redirect('/')
   else:
     nutrients = Nutrient.objects.all()
     product_form = ProductForm()
-    product_nutrients = ProductNutrientsForm()
-    context = {'product_nutrients': product_nutrients, 'product_form': product_form}
+    context = {'product_form': product_form, 'nutrients': nutrients}
     return render(request=request,
                   template_name="hotel/product_create.html",
                   context=context)
+
 
 def products_list(request):
   products = Product.objects.all()
   nutrients ={}
   for product in products:
     nutrients[product.pk] = product.productnutrients_set.all()
-  # import pdb; pdb.set_trace()
   return render(request, "hotel/products_list.html", {'products': products, 'nutrients': nutrients})
 
-# class ParentListView(ListView):
-#   model = Parent
-#
-#
-# class ProductCreateView(CreateView):
-#   model = Product
-#   fields = ["name","description","status"]
-#
-#   def get_context_data(self, **kwargs):
-#     data = super().get_context_data(**kwargs)
-#     if self.request.POST:
-#       data["product_nutrients"] = ProductNutrientFormset(self.request.POST)
-#     else:
-#       data["product_nutrients"] = ProductNutrientFormset()
-#     return data
-#
-#   def form_valid(self, form):
-#     context = self.get_context_data()
-#     product_nutrients = context["product_nutrients"]
-#     self.object = form.save()
-#     if product_nutrients.is_valid():
-#       product_nutrients.instance = self.object
-#       product_nutrients.save()
-#     return super().form_valid(form)
-#
-#
-#   def get_success_url(self):
-#     return reverse("hotel:product_list")
+def product_edit(request, id):
+  if not request.user.is_authenticated:
+    messages.info(request, "Please Login to continue.")
+    return redirect('/')
+  product = Product.objects.get(pk=id)
+  product_nutrients= product.productnutrients_set.all()
+  nutrients = Nutrient.objects.all()
+  if request.method == "GET":
+    return render(request, "hotel/product_edit.html", {'product': product, 'product_nutrients': product_nutrients, 'nutrients': nutrients})
+  else:
+    form = ProductForm(request.POST or None)
+    Product.objects.filter(pk=id).update(name=form.data['name'], description=form.data['description'])
+    if form.data['status'] == 'True':
+      product.status = True
+    else:
+      product.status = False
+    try:
+      i = 0
+      value = True
+      updated = {}
+      while value:
+        try:
+          n_id = request.POST[f"nutrient[{i}][id]"]
+          pn = ProductNutrients.objects.get(pk=n_id)
+        except:
+          n_id = False
+
+        if not n_id:
+          pn = ProductNutrients(product=product, nutrient=Nutrient(pk=request.POST[f"basic_attributes[{i}][select]"]),
+                                nutrient_value=request.POST[f"basic_attributes[{i}][number]"], updated_by=request.user)
+          pn.save()
+        else:
+          updated[pn.pk] = True
+          ProductNutrients.objects.filter(pk=n_id).update(nutrient=Nutrient(pk=request.POST[f"basic_attributes[{i}][select]"]),nutrient_value=request.POST[f"basic_attributes[{i}][number]"],updated_by=request.user)
+        i += 1
+        try:
+          value = request.POST[f"basic_attributes[{i}][select]"]
+        except :
+          value = False
+      messages.info(request, f"Product {form.data['name']} is updated.")
+      return redirect('/')
+    except:
+      messages.error(request, "Invalid details")
+    return render(request, "hotel/product_edit.html", {'product': product, 'product_nutrients': product_nutrients, 'nutrients': nutrients})
+
+
+def product_destroy(request, id):
+  if not request.user.is_authenticated:
+    messages.info(request, "Please Login to continue.")
+    return redirect('/')
+  product = Product.objects.get(pk=id)
+  product.delete()
+  messages.info(request, f"Product {product.name} is deleted.")
+  return redirect('hotel:products_list')
