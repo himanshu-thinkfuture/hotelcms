@@ -1,0 +1,12 @@
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+    <div class="container-fluid">
+      <ul>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'hotel:nutrients_list' %}">All Nutrients</a></li>
+        {% endif %}
+      </ul>
+    </div>
+
+{% endblock %}

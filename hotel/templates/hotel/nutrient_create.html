@@ -1,0 +1,12 @@
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <form method="POST" action= "{% url 'hotel:nutrient_create' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+            <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Create</button>
+        </form>
+    </div>
+{% endblock %}

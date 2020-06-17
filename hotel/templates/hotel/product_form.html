@@ -1,0 +1,35 @@
+
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+  <div class="container-fluid">
+    <h2>Product</h2>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+
+      <h4>Product Nutrients</h4>
+      {{ product_nutrients.as_p }}
+      <input type="submit" value="Save">
+    </form>
+  </div>
+
+{% endblock %}
+
+
+<!--<form method="POST" action= "{% url 'hotel:nutrient_edit' nutrient.id  %}">-->
+<!--    {% csrf_token %}-->
+<!--    <div class="container">-->
+<!--      <br>-->
+<!--      <div class="form-group row">-->
+<!--        <label class="col-form-label">Nutrient Name:</label>-->
+<!--          <input type="text" name="nutrient_name" id="nutrient_name" required maxlength="50" value="{{ nutrient.nutrient_name }}"/>-->
+<!--      </div>-->
+<!--      <div class="form-group row">-->
+<!--        <label class=" col-form-label">Nutrient Unit:</label>-->
+<!--          <input type="text" name="nutrient_unit" id="nutrient_unit" required maxlength="10" value="{{ nutrient.nutrient_unit }}"/>-->
+<!--      </div>-->
+<!--      <div class="form-group row">-->
+<!--        <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Update</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->

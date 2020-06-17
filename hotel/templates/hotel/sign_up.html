@@ -1,0 +1,15 @@
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button style="background-color:#F4E125; color:grey" class="btn btn-outline-info" type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    If you already have an account <a href="/hotel/login" target="blank"><strong>login</strong></a> instead.
+
+{% endblock %}
