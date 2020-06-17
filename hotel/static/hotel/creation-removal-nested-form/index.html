@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+  <script src="dist/jquery-nested-form.js"></script>
+  <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/solar/bootstrap.min.css">
+  <title>Nested Form Plugin Examples</title>
+</head>
+<body><div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="https://www.jqueryscript.net/form/creation-removal-nested-form.html">Download This Plugin</a></li>
+<li><a href="https://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul><div id="carbon-block"></div>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+  <div class="container">
+    <h1>Nested Form Plugin Examples</h1>
+  <h1>Basic Form</h1>
+  <form>
+    <div id="container">
+      <div class="nested-form">
+        <p><input type="text" name="basic_attributes[0][text]" id="basic_attributes_0_text" class="form-control"></p>
+        <p><textarea name="basic_attributes[0][textarea]" id="basic_attributes_0_textarea" class="form-control"></textarea></p>
+        <p>
+          <select name="basic_attributes[0][select]" id="basic_attributes_0_select" class="form-control">
+            <option value=""></option>
+            <option value="opt1">opt1</option>
+            <option value="opt2" selected="selected">opt2</option>
+          </select>
+        </p>
+        <p>
+          <input type="hidden" value="" name="basic_attributes[0][radio]">
+          <input type="radio" value="1" name="basic_attributes[0][radio]" id="basic_attributes_0_radio_1">
+          <label for="basic_attributes_0_radio_1">radio1</label>
+          <input type="radio" value="2" name="basic_attributes[0][radio]" id="basic_attributes_0_radio_2" checked="checked">
+          <label for="basic_attributes_0_radio_2">radio2</label>
+        </p>
+        <p>
+          <input type="hidden" value="0" name="basic_attributes[0][checkbox]">
+          <input type="checkbox" value="1" name="basic_attributes[0][checkbox]" id="basic_attributes_0_checkbox" checked="checked">
+          <label for="basic_attributes_0_checkbox">Checkbox</label>
+        </p>
+        <input type="hidden" value="999" name="basic_attributes[0][id]" id="basic_attributes_0_id">
+      </div>
+    </div>
+    <input type="button" value="Add" id="add" class="btn btn-danger">
+  </form>
+  <script>
+  $('#container').nestedForm({
+    forms: '.nested-form',
+    adder: '#add'
+  });
+  </script>
+
+  <h1>Removable Form</h1>
+  <form>
+    <div id="removable_container">
+      <div class="nested-form">
+        <p>
+          <input type="text" name="removable_attributes[0][text]" id="removable_attributes_0_text" class="form-control">
+        </p>
+      </div>
+      <div class="nested-form">
+        <p>
+          <input type="text" name="removable_attributes[1][text]" id="removable_attributes_1_text" class="form-control">
+          <input type="hidden" name="removable_attributes[1][_destroy]" id="removable_attributes_1__destroy">
+          <input type="button" value="Remove" class="removable-remove btn btn-danger">
+        </p>
+      </div>
+    </div>
+    <input type="button" value="Add" id="removable_add" class="btn btn-danger">
+  </form>
+  <script>
+  $('#removable_container').nestedForm({
+    forms: '.nested-form',
+    adder: '#removable_add',
+    remover: '.removable-remove'
+  });
+  </script>
+
+  <h1>Callback</h1>
+  <form>
+    <div id="callback_container">
+      <div class="nested-form">
+        <p>
+          <input type="text" name="callback_attributes[0][text]" id="callback_attributes_0_text" class="form-control">
+          <input type="button" value="Remove" class="callback-remove btn btn-danger">
+        </p>
+      </div>
+    </div>
+    <input type="button" value="Add" id="callback_add" class="btn btn-danger">
+    <p id="message" class="alert alert-info"> </p>
+  </form>
+  <script>
+  $('#callback_container').nestedForm({
+    forms: '.nested-form',
+    adder: '#callback_add',
+    remover: '.callback-remove',
+    afterInitialize: function(instance) {
+      $('#message').append('afterInitialize ');
+    },
+    onBuildTemplate: function($template) {
+      $('#message').append('onBuildTemplate ');
+    },
+    onBuildForm: function($elem) {
+      $('#message').append('onBuildForm ');
+    },
+    beforeAddForm: function($container, $elem) {
+      $('#message').append('beforeAddForm ');
+    },
+    afterAddForm: function($container, $elem) {
+      $('#message').append('afterAddForm ');
+    },
+    beforeRemoveForm: function($container, $elem) {
+      $('#message').append('beforeRemoveForm ');
+    },
+    afterRemoveForm: function($container, $elem) {
+      $('#message').append('afterRemoveForm ');
+    }
+  });
+  </script>
+
+  <h1>Customize start index</h1>
+  <form>
+    <div id="index_container">
+      <div class="nested-form">
+        <p>
+          <input type="text" name="index_attributes[10][text]" id="index_attributes_10_text" class="form-control">
+        </p>
+      </div>
+    </div>
+    <input type="button" value="Add" id="index_add" class="btn btn-danger">
+  </form>
+  <script>
+  $('#index_container').nestedForm({
+    forms: '.nested-form',
+    adder: '#index_add',
+    increment: 3,
+    startIndex: 10,
+    maxIndex: 15,
+    onBuildForm: function($elem, index) {
+      $elem.find('input[type="text"]').val(index);
+    }
+  });
+  </script>
+
+  <h1>Multiple associations</h1>
+  <form>
+    <div id="multiple_container">
+      <div class="nested-form">
+        <p>
+          <input type="text" name="some_attributes[0][text]" id="some_attributes_0_text" class="form-control">
+        </p>
+        <p>
+          <input type="text" name="other_attributes[0][text]" id="other_attributes_0_text" class="form-control">
+        </p>
+      </div>
+    </div>
+    <input type="button" value="Add" id="multiple_add" class="btn btn-danger">
+  </form>
+  <script>
+  $('#multiple_container').nestedForm({
+    forms: '.nested-form',
+    adder: '#multiple_add',
+    associations: ['some', 'other'],
+    onBuildForm: function($elem) {
+      showID($elem);
+    }
+  });
+  </script>
+
+  <h1>Complex Form</h1>
+  <form>
+    <div id="complex_container">
+      <div class="nested-form">
+        <input type="text" name="item[base_attributes][0][text]" id="item_base_attributes_0_text" style="width: 300px;" class="form-control">
+        <div class="deep-container">
+          <div class="deep-nested-form">
+            <input type="text" name="item[base_attributes][0][deep_attributes][0][text1]" id="item_base_attributes_0_deep_attributes_0_text1" style="width: 400px;" class="form-control">
+            <input type="text" name="item[base_attributes][0][deep_attributes][0][text2]" id="item_base_attributes_0_deep_attributes_0_text2" style="width: 400px;" class="form-control">
+          </div>
+        </div>
+        <input type="button" value="Add" class="deep-add btn btn-danger">
+      </div>
+    </div>
+    <hr>
+    <input type="button" value="Add" id="complex_add" class="btn btn-danger">
+  </form>
+  <script>
+  $('#complex_container').nestedForm({
+    forms: '.nested-form',
+    adder: '#complex_add',
+    associations: ['base'],
+    cloneEvents: false,
+    onBuildForm: function($elem) {
+      initDeepNestedForm($elem.find('.deep-container'));
+      showID($elem);
+    }
+  });
+  initDeepNestedForm($('#complex_container .deep-container'));
+
+  function showID($elem) {
+    $elem.find('input[type="text"]').each(function(i, input) {
+      $(input).val($(input).attr('id'));
+    });
+  }
+  function initDeepNestedForm($container) {
+    $container.nestedForm({
+      forms: $container.find('.deep-nested-form'),
+      adder: $container.siblings('.deep-add'),
+      associations: ['deep'],
+      cloneEvents: false,
+      onBuildForm: function($elem) {
+        showID($elem);
+      }
+    });
+  }
+  </script>
+</div>
+<script>
+try {
+  fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js", { method: 'HEAD', mode: 'no-cors' })).then(function(response) {
+    return true;
+  }).catch(function(e) {
+    var carbonScript = document.createElement("script");
+    carbonScript.src = "//cdn.carbonads.com/carbon.js?serve=CK7DKKQU&placement=wwwjqueryscriptnet";
+    carbonScript.id = "_carbonads_js";
+    document.getElementById("carbon-block").appendChild(carbonScript);
+  });
+} catch (error) {
+  console.log(error);
+}
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

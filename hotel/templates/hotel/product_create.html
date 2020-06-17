@@ -1,0 +1,30 @@
+{% extends 'hotel/header.html' %}
+
+{% block content %}
+
+    <p class="container">
+        <form method="POST" action= "{% url 'hotel:product_create' %}">
+        {% csrf_token %}
+       {{product_form.as_p}}
+          <script >
+          $('#removable_container').nestedForm({
+            forms: '.nested-form',
+            adder: '#removable_add',
+            remover: '.removable-remove'
+          });
+        </script>
+        <div id="removable_container">
+          {% for field in product_nutrients.visible_fields%}
+            <div class="nested-form">
+              {{ field.label_tag }}
+              {{ field }}
+            </div>
+          {% endfor %}
+        </div>
+        <input type="button" value="Add" id="removable_add" class="btn btn-danger">
+
+          <button style="background-color:#ADFF2F; color:grey" class="btn btn-outline-info" type="submit">Create</button>
+        </form>
+    </div>
+{% endblock %}
+
