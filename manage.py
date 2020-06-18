@@ -5,11 +5,12 @@ import sys
 
 
 def main():
-    if os.environ.get('DJANGO_ENV') == "development":
+    if os.environ.get('DJANGO_ENV') == "production":
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hotelcms.settings.prod_settings')
+    else:
         print(os.environ.get('DJANGO_ENV'))
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hotelcms.settings.dev_settings')
-    else:
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hotelcms.settings.prod_settings')
+
 
     try:
         from django.core.management import execute_from_command_line
